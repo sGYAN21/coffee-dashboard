@@ -2,7 +2,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Box, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { SidebarDrawer } from "../components/SideBarDrawer";
 import { NavBar } from "../components/NavBar";
 
@@ -21,45 +21,37 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     }
   }, [user, loading, isAuthPage, router]);
 
-  // 3. Render Auth Pages without Sidebar/Navbar
-  if (isAuthPage) {
+ if (loading) {
     return (
-      <Box 
-        component="main" 
-        sx={{ 
-          minHeight: '100vh', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          bgcolor: '#f5f5f5' // Light background for auth pages
-        }}
-      >
+      <Box sx={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', bgcolor: '#F8FAF3' }}>
+        <CircularProgress sx={{ color: '#3C2A21' }} />
+      </Box>
+    );
+  }
+ 
+ if (isAuthPage) {
+    return (
+      <Box component="main" sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#f5f5f5' }}>
         {children}
       </Box>
     );
   }
+  if (!user) {
+    return null;
+  }
 
-  // 4. Render Dashboard Layout
-  return (
+return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F8FAF3' }}>
       <SidebarDrawer />
-      
       <Stack 
         sx={{ 
           flexGrow: 1, 
-          width: { sm: `calc(100% - 240px)` }, // Adjust based on your Drawer width
+          width: { sm: `calc(100% - 240px)` }, 
           minHeight: '100vh'
         }}
       >
         <NavBar />
-        <Box 
-          component="main" 
-          sx={{ 
-            p: 3, 
-            flexGrow: 1, 
-            overflowY: 'auto' 
-          }}
-        >
+        <Box component="main" sx={{ p: 3, flexGrow: 1, overflowY: 'auto' }}>
           {children}
         </Box>
       </Stack>
