@@ -1,4 +1,4 @@
-import { updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
+import { updateProfile, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth } from "../client";
 
 type SignUpResponse = {
@@ -12,10 +12,11 @@ export const emailPasswordSignUp = async (
   pass: string
 ): Promise<SignUpResponse> => {
   try {
-    const res = await createUserWithEmailAndPassword(auth, mail, pass); 
+    const res = await createUserWithEmailAndPassword(auth, mail, pass);
 
     if (auth.currentUser) {
       await updateProfile(auth.currentUser, { displayName: username });
+      await sendEmailVerification(auth.currentUser);
     }
 
     return {

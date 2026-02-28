@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -26,25 +26,26 @@ const SignUp = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [success, setSuccess] = useState('');
 
   const handleSignUp = async () => {
-    if(!username || !email || !password){
+    if (!username || !email || !password) {
       setError("Please fill in all fields.");
       return;
 
     }
     setLoading(true);
     setError('');
-try {
-   await signUpUser(username, email, password, 'admin'); 
-  router.push('/menu');
-} catch (err: any) {
-  setError(err.message);
-}finally{
-  setLoading(false);
-}
-};
-
+    try {
+      await signUpUser(username, email, password, 'admin');
+      router.push('/sign-in');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Box
       sx={{
@@ -86,22 +87,33 @@ try {
           {/* Logo and Header */}
           <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
             <Stack direction="row" spacing={1.5} alignItems="center">
+              <Typography variant="h4" fontWeight="600" fontSize={50} color="#3c2a21" letterSpacing={0.5} >
+                Create new Account
+              </Typography>
+            </Stack>
+            <Box sx={{ display: 'flex', gap: 2 }}>
               <Box
                 sx={{
                   bgcolor: '#C67C4E',
-                  borderRadius: '50%',
-                  p: 0.8,
+                  borderRadius: '100%',
+                  p: 1.5,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+
+
                 }}
               >
-                <Coffee sx={{ color: 'white', fontSize: 28 }} />
+                <Coffee sx={{ color: 'white', fontSize: 32 }} />
               </Box>
-              <Typography variant="h4" fontWeight="600" fontSize={50} color="#3c2a21" letterSpacing={0.5}>
+
+              <Typography variant="h4" fontWeight="800" gutterBottom color="#3E2723">
                 Coffee Paglu
               </Typography>
-            </Stack>
+            </Box>
+            <Typography variant="body1" color="text.secondary">
+              Enter your details to create new account
+            </Typography>
           </Stack>
 
           {/* White Login Card */}
@@ -116,6 +128,7 @@ try {
           >
             <Stack spacing={2.5}>
               {error && <Alert severity="error">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
               <Box>
                 <Typography variant="subtitle2" sx={{ mb: 0.8, fontWeight: '700', color: '#5D4037' }}>
                   Username
@@ -125,7 +138,7 @@ try {
                   placeholder="johnDiggle"
                   size="small"
                   value={username}
-                  onChange={(e)=> setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value)}
                   sx={{ '& .MuiOutlinedInput-root': { borderRadius: 1.5 } }}
                 />
               </Box>
@@ -138,8 +151,8 @@ try {
                   fullWidth
                   placeholder="john.doe@example.com"
                   size="small"
-                  value= {email}
-                  onChange={(e)=>setEmail(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   slotProps={{
                     input: {
                       startAdornment: (
@@ -169,17 +182,17 @@ try {
                   placeholder="••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                     slotProps={{
+                  slotProps={{
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
-                       <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          size="small"
-                        >
-                          {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                        </IconButton>
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                            size="small"
+                          >
+                            {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                          </IconButton>
                         </InputAdornment>
                       ),
                     },
@@ -189,10 +202,9 @@ try {
                       borderRadius: 1.5,
                       bgcolor: 'white'
                     }
-                  }}               
+                  }}
                 />
               </Box>
-
               <Button
                 fullWidth
                 variant="contained"
@@ -209,7 +221,7 @@ try {
                   mt: 1
                 }}
               >
-               {loading ? 'Creating Account...' : 'Sign Up'}
+                {loading ? 'Sent Verification Link' : 'Send Verification Link'}
               </Button>
 
               <Typography variant="body2" align="center" color="text">

@@ -24,9 +24,9 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const handleSignIn = async () => {
-    if ( !email || !password) {
+    if (!email || !password) {
       setError("Please fill in all fields.");
       return;
     }
@@ -35,9 +35,9 @@ const SignIn = () => {
     setError('');
 
     try {
-      await signInUser( email, password,); 
+      await signInUser(email, password,);
       router.refresh();
-      router.push('/dashboard'); 
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -46,12 +46,12 @@ const SignIn = () => {
   };
 
   return (
-    <Box 
-      sx={{ 
-        minHeight: '100vh', 
+    <Box
+      sx={{
+        minHeight: '100vh',
         width: '100%',
         display: 'flex',
-        justifyContent: 'flex-end', 
+        justifyContent: 'flex-end',
         backgroundImage: 'url(/signin/coverImage3.jpg)',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
@@ -60,7 +60,7 @@ const SignIn = () => {
         bgcolor: 'rgba(0,0,0,0.2)',
       }}
     >
-   
+
       <Box
         sx={{
           position: 'absolute',
@@ -78,39 +78,41 @@ const SignIn = () => {
           alignItems: 'center',
           justifyContent: 'center',
           p: 3,
-          zIndex: 1, 
-        
+          zIndex: 1,
+
         }}
       >
         <Container maxWidth="sm" sx={{ px: { xs: 2, sm: 4 } }}>
           {/* Logo and Header */}
           <Stack spacing={1} alignItems="center" sx={{ mb: 4 }}>
             <Stack direction="row" spacing={1.5} alignItems="center">
-              <Box
-                sx={{
-                  bgcolor: '#C67C4E',
-                  borderRadius: '50%',
-                  p: 0.8,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <Coffee sx={{ color: 'white', fontSize: 28 }} />
-              </Box>
               <Typography variant="h4" fontWeight="600" fontSize={50} color="#3c2a21" letterSpacing={0.5} >
                 Welcome Back!
               </Typography>
             </Stack>
+            <Box sx={{ display: 'flex', gap:2 }}>
+              <Box
+                sx={{
+                  bgcolor: '#C67C4E',
+                  borderRadius: '100%',
+                  p:1.5,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+    
 
-            <Box textAlign="center" sx={{ pt: 2 }}>
-              <Typography variant="h4" fontWeight="800" gutterBottom color="#3E2723">
-                Coffee Paglu
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                Log in to your coffee shop dashboard.
-              </Typography>
+                }}
+              >
+                <Coffee sx={{ color: 'white', fontSize: 32 }} />
+              </Box>
+
+                <Typography variant="h4" fontWeight="800" gutterBottom color="#3E2723">
+                  Coffee Paglu
+                </Typography>
             </Box>
+            <Typography variant="body1" color="text.secondary">
+              Log in to your coffee shop dashboard.
+            </Typography>
           </Stack>
 
           {/* White Login Card */}
@@ -136,7 +138,7 @@ const SignIn = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   size="small"
 
-                     slotProps={{
+                  slotProps={{
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
@@ -151,7 +153,7 @@ const SignIn = () => {
                       bgcolor: 'white'
                     }
                   }}
-                 
+
                 />
               </Box>
 
@@ -210,7 +212,7 @@ const SignIn = () => {
                   mt: 1
                 }}
               >
-              {loading ? 'Sign in...' : 'Sign in'}
+                {loading ? 'Sign in...' : 'Sign in'}
               </Button>
 
               <Typography variant="body2" align="center" color="text.secondary">
