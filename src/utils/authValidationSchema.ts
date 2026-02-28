@@ -25,17 +25,7 @@ export const signUpSchema = z.object({
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(/[@$!%*?&]/, "Password must contain at least one special character (@$!%*?&)"),
 
-  confirmPassword: z.string()
 })
-.superRefine((data, ctx) => {
-  if (data.password !== data.confirmPassword) {
-    ctx.addIssue({
-      path: ["confirmPassword"],
-      code: z.ZodIssueCode.custom,
-      message: "Passwords do not match",
-    });
-  }
-});
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 

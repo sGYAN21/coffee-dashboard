@@ -14,7 +14,7 @@ import {
   Paper,
   Alert
 } from '@mui/material';
-import { Email, Visibility, VisibilityOff, Coffee } from '@mui/icons-material';
+import { Email, Visibility, VisibilityOff, Coffee, Lock } from '@mui/icons-material';
 import { signUpUser } from './Model/signupModel';
 import { useRouter } from 'next/navigation';
 import { SignUpFormData, signUpSchema } from '@/utils/authValidationSchema';
@@ -36,7 +36,6 @@ const SignUp = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  // 2. Updated handleSignUp to receive validated data from react-hook-form
   const handleSignUp = async (data: SignUpFormData) => {
     setError('');
     setSuccess('');
@@ -46,7 +45,7 @@ const SignUp = () => {
       await signUpUser(data.username, data.email, data.password, 'admin');
       setSuccess('Verification link has been sent to your email.');
       
-      reset(); // Clears form fields on success
+      reset(); 
       setTimeout(() => router.push('/sign-in'), 3000);
     } catch (err: any) {
       setError(err.message);
@@ -129,8 +128,7 @@ const SignUp = () => {
               boxShadow: '0px 10px 30px rgba(111, 78, 55, 0.05)'
             }}
           >
-            {/* 3. Wrap inputs in a form and use handleSubmit */}
-            <form onSubmit={handleSubmit(handleSignUp)}>
+            <form onSubmit={handleSubmit(handleSignUp, (errors) => console.log("Form Errors:", errors))}>
               <Stack spacing={2.5}>
                 {error && <Alert severity="error">{error}</Alert>}
                 {success && <Alert severity="success">{success}</Alert>}
@@ -195,7 +193,13 @@ const SignUp = () => {
                       input: {
                         startAdornment: (
                           <InputAdornment position="start">
+                            <Lock fontSize="small" sx={{ color: '#A1887F' }} />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
                             <IconButton
+                              type="button"
                               onClick={() => setShowPassword(!showPassword)}
                               edge="end"
                               size="small"
@@ -218,7 +222,7 @@ const SignUp = () => {
                 <Button
                   fullWidth
                   variant="contained"
-                  type="submit" // 4. Set type to submit
+                  type="submit"
                   disabled={loading}
                   sx={{
                     bgcolor: '#3c2a21',
