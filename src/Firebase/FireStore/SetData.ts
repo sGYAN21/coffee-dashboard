@@ -1,5 +1,5 @@
 import {addDoc, collection,doc,setDoc, type DocumentData, type DocumentReference, type CollectionReference } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../client";
 
 
 export const createDocument = async <T extends DocumentData>(collectionName: string,docId:string, data: T):Promise<void>=>{

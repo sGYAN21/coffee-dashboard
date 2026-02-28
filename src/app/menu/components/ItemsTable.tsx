@@ -10,6 +10,7 @@ import { ProductItem, deleteProduct, ProductRow, updateProductField } from '../M
 import { ItemDialog } from './ItemDialog';
 import { deleteImage } from '@/Firebase/FireStore/UploadImage';
 import { useAlert } from '@/context/AlertContext';
+import { SkeletonLoading } from './SkeletonLoading';
 
 interface TableProps {
   onSelect: (product: ProductRow) => void;
@@ -76,7 +77,7 @@ export const ItemsTable = ({ onSelect }: TableProps) => {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
-        <CircularProgress sx={{ color: '#c36c2d' }} />
+        <SkeletonLoading />
       </Box>
     );
   }
@@ -93,7 +94,7 @@ export const ItemsTable = ({ onSelect }: TableProps) => {
         <Table>
           <TableHead sx={{ bgcolor: '#f8f9fa' }}>
             <TableRow>
-              {['S.No', 'Image', 'Name', 'Type', 'Price (Med)', 'Rating', 'Actions', 'Status'].map((head) => (
+              {['S.No', 'Image', 'Name', 'Type', 'Price (small)', 'Volume (small)', 'Rating', 'Actions', 'Status'].map((head) => (
                 <TableCell key={head} sx={{ fontWeight: 'bold', color: 'text.secondary' }}>{head}</TableCell>
               ))}
             </TableRow>
@@ -133,6 +134,7 @@ export const ItemsTable = ({ onSelect }: TableProps) => {
                 <TableCell sx={{ fontWeight: 'bold' }}>{row.name}</TableCell>
                 <TableCell sx={{ textTransform: 'capitalize' }}>{row.type}</TableCell>
                 <TableCell sx={{ color: '#c36c2d', fontWeight: 'bold' }}>{row.price}</TableCell>
+                <TableCell sx={{ color: '#c36c2d', fontWeight: 'bold' }}>{row.rawVolumes.small} ml</TableCell>
                 <TableCell><Rating value={row.rating} readOnly size="small" /></TableCell>
                 
                 <TableCell>

@@ -1,5 +1,5 @@
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../client";
 
 
 export const UserSignOut = async (): Promise<boolean> => {

@@ -1,11 +1,10 @@
-import React from 'react'
-import SignIn from './sign-in/page'
-import HomePage from './home/HomePage'
+
+import Dashboard from './dashboard/page'
 function page() {
   return (
     <>
    {/* <SignIn/> */}
-   <HomePage/>
+   <Dashboard/>
     </>
   )
 }

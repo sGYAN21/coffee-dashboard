@@ -5,7 +5,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 
-import { storage } from "../firebase";
+import { storage } from "../client";
 
 export const UploadImage = async (imageFile:File)=>{
 

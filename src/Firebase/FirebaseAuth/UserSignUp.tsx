@@ -1,5 +1,5 @@
 import { updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../client";
 
 type SignUpResponse = {
   uid: string;

@@ -4,7 +4,7 @@ import {
   updatePassword,
   reauthenticateWithCredential,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../client";
 
 /**
  * Sends a password reset link to the user's email.

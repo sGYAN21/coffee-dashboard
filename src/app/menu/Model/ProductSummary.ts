@@ -1,5 +1,5 @@
 import { collection, collectionGroup, getDocs } from 'firebase/firestore';
-import { db } from '@/Firebase/firebase'; 
+import { db } from '@/Firebase/client'; 
 export interface CategorySummary {
   label: string;
   count: number;

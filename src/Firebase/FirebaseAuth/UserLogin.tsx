@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword, UserCredential } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../client";
 
 /**
  * Log in users using Email and Password.

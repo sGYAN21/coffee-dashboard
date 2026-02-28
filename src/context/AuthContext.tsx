@@ -1,7 +1,7 @@
 'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '@/Firebase/firebase';
+import { auth } from '@/Firebase/client';
 import { Box, CircularProgress } from '@mui/material';
 
 interface AuthContextType {

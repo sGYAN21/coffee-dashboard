@@ -24,6 +24,7 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
   const handleSignIn = async () => {
     if ( !email || !password) {
       setError("Please fill in all fields.");
@@ -35,7 +36,8 @@ const SignIn = () => {
 
     try {
       await signInUser( email, password,); 
-      router.push('/menu'); 
+      router.refresh();
+      router.push('/dashboard'); 
     } catch (err: any) {
       setError(err.message);
     } finally {

@@ -1,6 +1,5 @@
 import { collectionGroup, query, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { db } from '@/Firebase/firebase';
-
+import { db } from '@/Firebase/client';
 export interface ProductRow {
   id: string;
   name: string;
@@ -29,7 +28,7 @@ export const ProductItem = async (): Promise<ProductRow[]> => {
         name: data.name || 'Unnamed',
         type: data.type || 'N/A',
         category: data.category,
-        price: data.price?.medium ? `$${data.price.medium}` : 'N/A',
+        price: data.price?.small ? `$${data.price.small}` : 'N/A',
         isActive: data.isActive ?? true,
         rawPrices: data.price || {},
         rawVolumes: data.volume || {},

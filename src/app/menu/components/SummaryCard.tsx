@@ -32,10 +32,10 @@ export const SummaryCard = () => {
     width: '300px' 
   }}>
     <Stack spacing={2}>
-      {loading ? (
-        <Stack alignItems="center" p={2}><CircularProgress size={24} /></Stack>
-      ) : (
-      data.map((cat, index) => (
+      {/* {loading ? ( */}
+         {/* <Stack alignItems="center" p={2}><CircularProgress size={24} /></Stack>
+      // ) : ( */}
+      {data.map((cat, index) => (
         <Box key={cat.label}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Stack direction="row" spacing={2} alignItems="center">
@@ -50,7 +50,7 @@ export const SummaryCard = () => {
           </Stack>
           {index < data.length - 1 && <Divider sx={{ mt: 1 }} />}
         </Box>
-      )))}
+      ))}
     </Stack>
   </Box>
   )
