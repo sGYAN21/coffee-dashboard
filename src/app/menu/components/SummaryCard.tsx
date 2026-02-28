@@ -3,13 +3,6 @@ import { Box, Typography, Stack, Divider, CircularProgress } from '@mui/material
 import { useEffect, useState } from 'react';
 import { CategorySummary, ProductSummary } from '../Model/ProductSummary';
 
-const categories = [
-  { label: 'Coffees', count: 105, icon: '☕' },
-  { label: 'Juices', count: 57, icon: '🍹' },
-  { label: 'Liquors', count: 27, icon: '🥃' },
-  { label: 'Mocktails', count: 39, icon: '🍸' },
-];
-
 export const SummaryCard = () => {
   const [data, setData] = useState<CategorySummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,9 +25,6 @@ export const SummaryCard = () => {
       width: '300px'
     }}>
       <Stack spacing={2}>
-        {/* {loading ? ( */}
-        {/* <Stack alignItems="center" p={2}><CircularProgress size={24} /></Stack>
-      // ) : ( */}
         {data.map((cat, index) => (
           <Box key={cat.label}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">

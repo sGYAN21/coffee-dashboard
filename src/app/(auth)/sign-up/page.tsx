@@ -19,14 +19,12 @@ import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
   const router = useRouter();
-
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
   const [success, setSuccess] = useState('');
 
   const handleSignUp = async () => {
