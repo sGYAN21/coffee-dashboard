@@ -38,11 +38,8 @@ export default async function Dashboard() {
     const decodedClaims = await adminAuth.verifySessionCookie(session, true);
     userEmail = decodedClaims.email || "Valued Member";
   } catch (error) {
-    // 3. If cookie is expired or invalid, boot to sign-in
     redirect("/sign-in");
   }
-
-  // 4. Render the protected UI
   return (
     <Box sx={{ bgcolor: '#F5F5F5', minHeight: '100vh', py: 4 }}>
       <Container maxWidth="lg">

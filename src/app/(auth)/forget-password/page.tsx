@@ -15,24 +15,33 @@ import {
 import { Email, Coffee, ArrowBack } from '@mui/icons-material';
 import { resetUserPassword } from './Model/forgetModel';
 
+// Validation Imports
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { forgotPasswordSchema, ForgotPasswordFormData } from '@/utils/authValidationSchema';
+
 const ForgetPassword = () => {
-  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleResetPassword = async () => {
-    if (!email) {
-      setError("Please enter your email address.");
-      return;
-    }
+ 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+  });
 
+
+  const handleResetPassword = async (data: ForgotPasswordFormData) => {
     setLoading(true);
     setError('');
     setSuccess('');
 
     try {
-      await resetUserPassword(email);
+      await resetUserPassword(data.email);
       setSuccess('Password reset link has been sent to your email.');
     } catch (err: any) {
       setError(err.message);
@@ -106,6 +115,7 @@ const ForgetPassword = () => {
               Enter your email to receive a password reset link.
             </Typography>
           </Stack>
+
           {/* White Reset Card */}
           <Paper
             elevation={0}
@@ -116,74 +126,78 @@ const ForgetPassword = () => {
               boxShadow: '0px 10px 30px rgba(111, 78, 55, 0.05)'
             }}
           >
-            <Stack spacing={2.5}>
-              {error && <Alert severity="error">{error}</Alert>}
-              {success && <Alert severity="success">{success}</Alert>}
+            {/* 3. Wrap in form tag */}
+            <form onSubmit={handleSubmit(handleResetPassword)}>
+              <Stack spacing={2.5}>
+                {error && <Alert severity="error">{error}</Alert>}
+                {success && <Alert severity="success">{success}</Alert>}
 
-              <Box>
-                <Typography variant="subtitle2" sx={{ mb: 0.8, fontWeight: '700', color: '#5D4037' }}>
-                  Email Address
-                </Typography>
-                <TextField
+                <Box>
+                  <Typography variant="subtitle2" sx={{ mb: 0.8, fontWeight: '700', color: '#5D4037' }}>
+                    Email Address
+                  </Typography>
+                  <TextField
+                    {...register("email")} 
+                    fullWidth
+                    placeholder="john.doe@example.com"
+                    size="small"
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Email fontSize="small" sx={{ color: '#C67C4E' }} />
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 1.5,
+                        bgcolor: 'white'
+                      }
+                    }}
+                  />
+                </Box>
+
+                <Button
                   fullWidth
-                  placeholder="john.doe@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  size="small"
-                  slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Email fontSize="small" sx={{ color: '#C67C4E' }} />
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
+                  variant="contained"
+                  type="submit" 
+                  disabled={loading}
                   sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 1.5,
-                      bgcolor: 'white'
-                    }
-                  }}
-                />
-              </Box>
-
-              <Button
-                fullWidth
-                variant="contained"
-                onClick={handleResetPassword}
-                disabled={loading}
-                sx={{
-                  bgcolor: '#3c2a21',
-                  '&:hover': { bgcolor: '#C67C4E' },
-                  textTransform: 'none',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  py: 1.2,
-                  borderRadius: 2,
-                  mt: 1
-                }}
-              >
-                {loading ? 'Sending link...' : 'Send Link'}
-              </Button>
-
-              <Box textAlign="center" sx={{ pt: 1 }}>
-                <Link
-                  href="/sign-in"
-                  sx={{
-                    color: '#C67C4E',
-                    fontWeight: '700',
-                    textDecoration: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 0.5
+                    bgcolor: '#3c2a21',
+                    '&:hover': { bgcolor: '#C67C4E' },
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    py: 1.2,
+                    borderRadius: 2,
+                    mt: 1
                   }}
                 >
-                  <ArrowBack fontSize="small" /> Back to Sign In
-                </Link>
-              </Box>
-            </Stack>
+                  {loading ? 'Sending link...' : 'Send Link'}
+                </Button>
+
+                <Box textAlign="center" sx={{ pt: 1 }}>
+                  <Link
+                    href="/sign-in"
+                    sx={{
+                      color: '#C67C4E',
+                      fontWeight: '700',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 0.5
+                    }}
+                  >
+                    <ArrowBack fontSize="small" /> Back to Sign In
+                  </Link>
+                </Box>
+              </Stack>
+            </form>
           </Paper>
         </Container>
       </Box>

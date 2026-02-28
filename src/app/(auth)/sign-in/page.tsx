@@ -17,25 +17,33 @@ import { Email, Lock, Visibility, VisibilityOff, Coffee } from '@mui/icons-mater
 import { useRouter } from 'next/navigation';
 import { signInUser } from './Model/signinModel';
 
+// Validation Imports
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signInSchema, SignInFormData } from '@/utils/authValidationSchema'; 
+
 const SignIn = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSignIn = async () => {
-    if (!email || !password) {
-      setError("Please fill in all fields.");
-      return;
-    }
+  // 1. Initialize useForm
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+  });
 
+  // 2. Updated handler that receives validated data
+  const handleSignIn = async (data: SignInFormData) => {
     setLoading(true);
     setError('');
 
     try {
-      await signInUser(email, password,);
+      await signInUser(data.email, data.password);
       router.refresh();
       router.push('/dashboard');
     } catch (err: any) {
@@ -60,7 +68,6 @@ const SignIn = () => {
         bgcolor: 'rgba(0,0,0,0.2)',
       }}
     >
-
       <Box
         sx={{
           position: 'absolute',
@@ -79,7 +86,6 @@ const SignIn = () => {
           justifyContent: 'center',
           p: 3,
           zIndex: 1,
-
         }}
       >
         <Container maxWidth="sm" sx={{ px: { xs: 2, sm: 4 } }}>
@@ -90,25 +96,23 @@ const SignIn = () => {
                 Welcome Back!
               </Typography>
             </Stack>
-            <Box sx={{ display: 'flex', gap:2 }}>
+            <Box sx={{ display: 'flex', gap: 2 }}>
               <Box
                 sx={{
                   bgcolor: '#C67C4E',
                   borderRadius: '100%',
-                  p:1.5,
+                  p: 1.5,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-    
-
                 }}
               >
                 <Coffee sx={{ color: 'white', fontSize: 32 }} />
               </Box>
 
-                <Typography variant="h4" fontWeight="800" gutterBottom color="#3E2723">
-                  Coffee Paglu
-                </Typography>
+              <Typography variant="h4" fontWeight="800" gutterBottom color="#3E2723">
+                Coffee Paglu
+              </Typography>
             </Box>
             <Typography variant="body1" color="text.secondary">
               Log in to your coffee shop dashboard.
@@ -125,103 +129,107 @@ const SignIn = () => {
               boxShadow: '0px 10px 30px rgba(111, 78, 55, 0.05)'
             }}
           >
-            <Stack spacing={2.5}>
-              {error && <Alert severity="error">{error}</Alert>}
-              <Box>
-                <Typography variant="subtitle2" sx={{ mb: 0.8, fontWeight: '700', color: '#5D4037' }}>
-                  Email Address
-                </Typography>
-                <TextField
-                  fullWidth
-                  placeholder="john.doe@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  size="small"
+            {/* 3. Wrap in form with handleSubmit */}
+            <form onSubmit={handleSubmit(handleSignIn)}>
+              <Stack spacing={2.5}>
+                {error && <Alert severity="error">{error}</Alert>}
+                
+                <Box>
+                  <Typography variant="subtitle2" sx={{ mb: 0.8, fontWeight: '700', color: '#5D4037' }}>
+                    Email Address
+                  </Typography>
+                  <TextField
+                    {...register("email")} // 4. Connect to validation
+                    fullWidth
+                    placeholder="john.doe@example.com"
+                    size="small"
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Email fontSize="small" sx={{ color: '#C67C4E' }} />
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 1.5,
+                        bgcolor: 'white'
+                      }
+                    }}
+                  />
+                </Box>
 
-                  slotProps={{
-                    input: {
+                <Box>
+                  <Typography variant="subtitle2" sx={{ mb: 0.8, fontWeight: '700', color: '#5D4037' }}>
+                    Password
+                  </Typography>
+                  <TextField
+                    {...register("password")} // 5. Connect to validation
+                    fullWidth
+                    size="small"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••"
+                    error={!!errors.password}
+                    helperText={errors.password?.message}
+                    InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Email fontSize="small" sx={{ color: '#C67C4E' }} />
+                          <Lock fontSize="small" sx={{ color: '#C67C4E' }} />
                         </InputAdornment>
                       ),
-                    },
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 1.5,
-                      bgcolor: 'white'
-                    }
-                  }}
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                            size="small"
+                          >
+                            {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{ '& .MuiOutlinedInput-root': { borderRadius: 1.5 } }}
+                  />
+                </Box>
 
-                />
-              </Box>
+                <Box textAlign="right">
+                  <Link href="forget-password" underline="hover" sx={{ color: '#C67C4E', fontSize: '0.8rem', fontWeight: '500' }}>
+                    Forgot Password?
+                  </Link>
+                </Box>
 
-              <Box>
-                <Typography variant="subtitle2" sx={{ mb: 0.8, fontWeight: '700', color: '#5D4037' }}>
-                  Password
-                </Typography>
-                <TextField
+                <Button
                   fullWidth
-                  size="small"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Lock fontSize="small" sx={{ color: '#C67C4E' }} />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          size="small"
-                        >
-                          {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
+                  variant="contained"
+                  type="submit" // 6. Ensure type is submit
+                  disabled={loading}
+                  sx={{
+                    bgcolor: '#3c2a21',
+                    '&:hover': { bgcolor: '#C67C4E' },
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    py: 1.2,
+                    borderRadius: 2,
+                    mt: 1
                   }}
-                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: 1.5 } }}
-                />
-              </Box>
+                >
+                  {loading ? 'Sign in...' : 'Sign in'}
+                </Button>
 
-              <Box textAlign="right">
-                <Link href="forget-password" underline="hover" sx={{ color: '#C67C4E', fontSize: '0.8rem', fontWeight: '500' }}>
-                  Forgot Password?
-                </Link>
-              </Box>
-
-              <Button
-                fullWidth
-                variant="contained"
-                onClick={handleSignIn}
-                disabled={loading}
-                sx={{
-                  bgcolor: '#3c2a21',
-                  '&:hover': { bgcolor: '#C67C4E' },
-                  textTransform: 'none',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  py: 1.2,
-                  borderRadius: 2,
-                  mt: 1
-                }}
-              >
-                {loading ? 'Sign in...' : 'Sign in'}
-              </Button>
-
-              <Typography variant="body2" align="center" color="text.secondary">
-                Don't have an account?{' '}
-                <Link href="/sign-up" sx={{ color: '#C67C4E', fontWeight: '700', textDecoration: 'none' }}>
-                  Sign Up
-                </Link>
-              </Typography>
-            </Stack>
+                <Typography variant="body2" align="center" color="text.secondary">
+                  Don't have an account?{' '}
+                  <Link href="/sign-up" sx={{ color: '#C67C4E', fontWeight: '700', textDecoration: 'none' }}>
+                    Sign Up
+                  </Link>
+                </Typography>
+              </Stack>
+            </form>
           </Paper>
         </Container>
       </Box>
