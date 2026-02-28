@@ -13,9 +13,14 @@ import {
 // 1. Import the correct Link and Hook
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
+
 import { UserSignOut } from '@/Firebase/FirebaseAuth/UserSignOut';
 import { useAlert } from '@/context/AlertContext';
+
+type SidebarProps = {
+  open: boolean;
+  onClose: () => void;
+};
 
 const drawerWidth = 240;
 
@@ -28,12 +33,12 @@ const menuItems = [
   { text: 'Settings', icon: <Settings />, path: '/settings' },
 ];
 
-export const SidebarDrawer = () => {
- const {showAlert} = useAlert();
+export const SidebarDrawer: React.FC<SidebarProps> = ({ open, onClose }) => {
+  const { showAlert } = useAlert();
   const pathname = usePathname();
-const router = useRouter();
-// const { logout } = useAuth();
-const handleLogout = async () => {
+  const router = useRouter();
+  // const { logout } = useAuth();
+  const handleLogout = async () => {
     try {
       const success = await UserSignOut();
       if (success) {
@@ -45,21 +50,8 @@ const handleLogout = async () => {
     }
   };
 
-  return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-          bgcolor: '#3C2A21',
-          borderRight: '1px solid #2D1E19',
-          color: 'white',
-        },
-      }}
-    >
+  const drawerContent = (
+    <>
       <Toolbar>
         <Stack direction="row" spacing={1} alignItems="center">
           <Avatar sx={{ bgcolor: '#7B4D31', width: 32, height: 32 }}>
@@ -72,11 +64,9 @@ const handleLogout = async () => {
       </Toolbar>
       <List sx={{ mt: 2 }}>
         {menuItems.map((item) => {
-          // 3. Check if this specific item is active
           const isActive = pathname === item.path;
 
           return (
-            /* 4. Use Next.js Link with legacyBehavior or pass child directly to remove blue/underline */
             <Link
               href={item.path}
               key={item.text}
@@ -84,9 +74,10 @@ const handleLogout = async () => {
             >
               <ListItem disablePadding>
                 <ListItemButton
+                  onClick={onClose} // Add onClose here to hide drawer on mobile
                   sx={{
                     py: 1.5,
-                    // 5. Apply dynamic colors based on active state
+
                     color: isActive ? '#D4A373' : 'inherit',
                     borderLeft: isActive ? '4px solid #D4A373' : '4px solid transparent',
                     bgcolor: isActive ? 'rgba(212, 163, 115, 0.1)' : 'transparent',
@@ -110,14 +101,13 @@ const handleLogout = async () => {
         })}
       </List>
       <Box sx={{ flexGrow: 1 }} />
-
-      {/* 2. Logout Button Section */}
       <List sx={{ mb: 2 }}>
         <ListItem disablePadding>
           <ListItemButton
             onClick={handleLogout}
             sx={{
               py: 1.5,
+              justifyContent: 'center', // Center content horizontally
               color: '#FF6B6B', // Subtle red to indicate action
               borderLeft: '4px solid transparent',
               '&:hover': {
@@ -126,16 +116,45 @@ const handleLogout = async () => {
               }
             }}
           >
-            <ListItemIcon sx={{ color: 'inherit', minWidth: 45 }}>
-              <Logout />
-            </ListItemIcon>
-            <ListItemText 
-                primary="Logout" 
-                primaryTypographyProps={{ fontWeight: '600' }} 
-            />
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Logout fontSize="small" />
+              <Typography fontWeight="600">Logout</Typography>
+            </Stack>
           </ListItemButton>
         </ListItem>
       </List>
-    </Drawer>
+    </>
+  );
+
+  return (
+    <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+      {/* Mobile Drawer */}
+      <Drawer
+        variant="temporary"
+        open={open}
+        onClose={onClose}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, bgcolor: '#3C2A21', borderRight: '1px solid #2D1E19', color: 'white' },
+        }}
+      >
+        {drawerContent}
+      </Drawer>
+
+      {/* Desktop Drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: 'none', sm: 'block' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, bgcolor: '#3C2A21', borderRight: '1px solid #2D1E19', color: 'white' },
+        }}
+        open
+      >
+        {drawerContent}
+      </Drawer>
+    </Box>
   );
 };

@@ -1,21 +1,38 @@
 'use client'
 import React from 'react';
 import {
-  AppBar, Toolbar, TextField, InputAdornment, Stack, 
+  AppBar, Toolbar, TextField, InputAdornment, Stack,
   IconButton, Avatar, Box, Typography
 } from '@mui/material';
 import { Search, Notifications } from '@mui/icons-material';
-
+import MenuIcon from '@mui/icons-material/Menu';
+import { SidebarDrawer } from './SideBarDrawer';
 export const NavBar = () => {
+  const [open, setOpen] = React.useState(false);
   return (
-    <AppBar 
-      position="fixed" 
-      color="transparent" 
-      elevation={0} 
-      sx={{ bgcolor: '#C67C4E' }}
-      
+    <AppBar
+      position="fixed"
+      color="transparent"
+      elevation={0}
+      sx={{
+        bgcolor: '#C67C4E',
+        width: { sm: `calc(100% - 240px)` }, 
+        ml: { sm: `240px` },
+      }}
     >
-      <Toolbar sx={{ justifyContent: 'flex-end' }}>
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton
+            onClick={() => setOpen(true)}
+            size="large"
+     
+            edge="start"
+            sx={{ mr: 2,color: '#fff', display: { sm: 'none' } }} // Hide on sm and up
+          >
+            <MenuIcon />
+          </IconButton>
+        </Box>
+        <SidebarDrawer open={open} onClose={() => setOpen(false)} />
         <TextField
           placeholder="Search items"
           size="small"
@@ -28,14 +45,14 @@ export const NavBar = () => {
               ),
             },
           }}
-          sx={{ 
-            width: 400, 
-            bgcolor: '#ffff', 
+          sx={{
+            width: 400,
+            bgcolor: '#ffff',
             borderRadius: 2,
             '& .MuiOutlinedInput-notchedOutline': { border: 'none' }
           }}
         />
-        
+
         <Stack direction="row" spacing={2} alignItems="center">
           <IconButton sx={{ color: '#D4A373' }}>
             <Notifications />

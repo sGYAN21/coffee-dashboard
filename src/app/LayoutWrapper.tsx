@@ -12,24 +12,24 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const pathname = usePathname();
 
 
-  const isAuthPage = pathname === '/sign-in' || pathname === '/sign-up';
+  const isAuthPage = pathname === '/sign-in' || pathname === '/sign-up' || pathname === '/forget-password';
 
   useEffect(() => {
-    // 2. Fix: Redirect to the correct sign-in path
+
     if (!loading && !user && !isAuthPage) {
-      router.push('/sign-in'); // Changed from '/login' to match your check
+      router.push('/sign-in');
     }
   }, [user, loading, isAuthPage, router]);
 
- if (loading) {
+  if (loading) {
     return (
       <Box sx={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', bgcolor: '#F8FAF3' }}>
         <CircularProgress sx={{ color: '#3C2A21' }} />
       </Box>
     );
   }
- 
- if (isAuthPage) {
+
+  if (isAuthPage) {
     return (
       <Box component="main" sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#f5f5f5' }}>
         {children}
@@ -40,17 +40,19 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     return null;
   }
 
-return (
+  return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F8FAF3' }}>
-      <SidebarDrawer />
-      <Stack 
-        sx={{ 
-          flexGrow: 1, 
-          width: { sm: `calc(100% - 240px)` }, 
+      <NavBar />
+      <Stack
+        sx={{
+          flexGrow: 1,
+          width: { sm: `calc(100% - 240px)` },
+          ml: { sm: `240px` },
+          mt: { xs: '56px', sm: '64px' },
           minHeight: '100vh'
         }}
       >
-        <NavBar />
+        {/* <SidebarDrawer /> */}
         <Box component="main" sx={{ p: 3, flexGrow: 1, overflowY: 'auto' }}>
           {children}
         </Box>

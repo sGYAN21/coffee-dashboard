@@ -40,23 +40,23 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [price, setPrice] = useState({ small: '', medium: '', large: '' });
   const [volume, setVolume] = useState({ small: '', medium: '', large: '' });
-  
 
-// UI State
+
+  // UI State
   const [loading, setLoading] = useState(false);
- 
+
   useEffect(() => {
     if (editData) {
       setName(editData.name || '');
       setType(editData.type || 'coffee');
       setCategory(editData.category || '');
-      setDescription(editData.description || ''); 
+      setDescription(editData.description || '');
       setPrice(editData.rawPrices || { small: '', medium: '', large: '' });
       setVolume(editData.rawVolumes || { small: '', medium: '', large: '' });
       setPreviewUrl(editData.imageUrl || null);
     } else {
       // Reset form for "Add New" mode
-    setName('');
+      setName('');
       setType('coffee');
       setCategory('');
       setDescription('');
@@ -123,7 +123,8 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
             <Box
               component="label"
               sx={{
-                height: 180, border: '2px dashed #e0e0e0', borderRadius: 2,
+                height: 300,
+                border: '2px dashed #e0e0e0', borderRadius: 2,
                 display: 'flex', flexDirection: 'column', alignItems: 'center',
                 justifyContent: 'center', bgcolor: '#fcfcfc', cursor: 'pointer',
                 overflow: 'hidden'
@@ -161,7 +162,7 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
           </Stack>
 
           {/* Right Column: Details & Maps */}
-          <Stack spacing={2.5} sx={{ flex: 1.2 }}>
+          <Stack spacing={2.5} sx={{ flex: 1 }}>
             <TextField
               label="Item Name" fullWidth size="small"
               value={name} onChange={(e) => setName(e.target.value)}
@@ -192,7 +193,7 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
             </Stack>
 
             <TextField
-              label="Description" fullWidth multiline rows={3}
+              label="Description" fullWidth multiline rows={7}
               value={description} onChange={(e) => setDescription(e.target.value)}
             />
           </Stack>
