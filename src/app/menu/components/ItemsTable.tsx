@@ -132,7 +132,7 @@ export const ItemsTable = ({ onSelect }: TableProps) => {
                 </TableCell>
 
                 <TableCell sx={{ fontWeight: 'bold' }}>{row.name}</TableCell>
-                <TableCell sx={{ textTransform: 'capitalize' }}>{row.type}</TableCell>
+                <TableCell sx={{ textTransform: 'capitalize' }}>{row.category}</TableCell>
                 <TableCell sx={{ color: '#c36c2d', fontWeight: 'bold' }}>{row.price}</TableCell>
                 <TableCell sx={{ color: '#c36c2d', fontWeight: 'bold' }}>{row.rawVolumes.small} ml</TableCell>
                 <TableCell><Rating value={row.rating} readOnly size="small" /></TableCell>

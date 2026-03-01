@@ -28,8 +28,8 @@ export const uploadProductItem = async (data: ProductData) => {
     const productDoc = {
       name: data.name,
       description: data.description,
-      category: data.category,
-      type: data.type.toLowerCase(),
+      category: data.category.toLowerCase(),
+      type: data.type,
       image: imageUrl,
       price: data.price,
       volume: data.volume,
@@ -37,7 +37,7 @@ export const uploadProductItem = async (data: ProductData) => {
     };
 
 
-    const collectionPath = `products/${data.type.toLowerCase()}/items`;
+    const collectionPath = `products/${data.category.toLowerCase()}/items`;
 
     // 4. Save to Firestore
     const docRef = await addDoc(collection(db, collectionPath), productDoc);
@@ -67,8 +67,8 @@ export const updateProductItem = async (path: string, data: ProductData, oldImag
     await updateDoc(docRef, {
       name: data.name,
       description: data.description,
-      category: data.category,
-      type: data.type.toLowerCase(),
+      category: data.category.toLowerCase(),
+      type: data.type,
       image: finalImageUrl,
       price: data.price,
       volume: data.volume,

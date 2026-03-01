@@ -31,8 +31,8 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
 
   const { showAlert } = useAlert();
   // Form State
-  const [type, setType] = useState('Coffee');
-  const [category, setCategory] = useState('');
+  const [type, setType] = useState('');
+  const [category, setCategory] = useState('coffee');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [rating, setRating] = useState<number | null>(0);
@@ -45,11 +45,13 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
   // UI State
   const [loading, setLoading] = useState(false);
 
+  const isFormInvalid = !name.trim() || !type;
+
   useEffect(() => {
     if (editData) {
       setName(editData.name || '');
-      setType(editData.type || 'coffee');
-      setCategory(editData.category || '');
+      setCategory(editData.category || 'coffee');
+      setType(editData.type || '');
       setDescription(editData.description || '');
       setPrice(editData.rawPrices || { small: '', medium: '', large: '' });
       setVolume(editData.rawVolumes || { small: '', medium: '', large: '' });
@@ -57,8 +59,8 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
     } else {
       // Reset form for "Add New" mode
       setName('');
-      setType('coffee');
-      setCategory('');
+      setCategory('coffee');
+      setType('');
       setDescription('');
       setPrice({ small: '', medium: '', large: '' });
       setVolume({ small: '', medium: '', large: '' });
@@ -86,6 +88,7 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
         imageFile,
         price,
         volume,
+        isActive: editData ? editData.isActive : true,
       };
 
       if (editData) {
@@ -142,8 +145,8 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
             </Box>
 
             <Box>
-              <Typography variant="caption" fontWeight="bold">Type</Typography>
-              <Select fullWidth size="small" value={type} onChange={(e) => setType(e.target.value)}>
+              <Typography variant="caption" fontWeight="bold">Category</Typography>
+              <Select fullWidth size="small" value={category} onChange={(e) => setCategory(e.target.value)}>
                 <MenuItem value="coffee">Coffee</MenuItem>
                 <MenuItem value="juices">Juice</MenuItem>
                 <MenuItem value="shakes">Shakes</MenuItem>
@@ -153,8 +156,8 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
             </Box>
 
             <Box>
-              <Typography variant="caption" fontWeight="bold">Category</Typography>
-              <Select fullWidth size="small" value={category} onChange={(e) => setCategory(e.target.value)}>
+              <Typography variant="caption" fontWeight="bold">Type</Typography>
+              <Select fullWidth size="small" value={type} onChange={(e) => setType(e.target.value)}>
                 <MenuItem value="iced">Iced Drinks</MenuItem>
                 <MenuItem value="hot">Hot Drinks</MenuItem>
               </Select>
@@ -205,7 +208,7 @@ export const ItemDialog = ({ open, onClose, editData }: ItemDialogProps) => {
         <Button
           variant="contained"
           onClick={handleSave}
-          disabled={loading}
+          disabled={loading || isFormInvalid}
           sx={{ bgcolor: '#c36c2d', '&:hover': { bgcolor: '#a05624' } }}
         >
           {loading ? 'Processing...' : editData ? 'Update Item' : 'Save Item'}

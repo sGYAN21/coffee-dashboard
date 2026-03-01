@@ -4,17 +4,17 @@ export interface CategorySummary {
   label: string;
   count: number;
   icon: string;
-  type: string; 
+  category: string; 
 }
 
 export const ProductSummary = async (): Promise<CategorySummary[]> => {
   const categories: CategorySummary[] = [
-    { label: 'Coffees', count: 0, icon: '☕', type: 'coffee' },
-    { label: 'Juices', count: 0, icon: '🍹', type: 'juices' },
-    { label: 'Liquors', count: 0, icon: '🥃', type: 'liquor' },
-    { label: 'Mocktails', count: 0, icon: '🍸', type: 'mocktails' },
-     { label: 'Shakes', count: 0, icon: '🥤', type: 'shakes' },
-    { label: 'Protein Shakes', count: 0, icon: '💪', type: 'protein_shakes' },
+    { label: 'Coffees', count: 0, icon: '☕', category: 'coffee' },
+    { label: 'Juices', count: 0, icon: '🍹', category: 'juices' },
+    { label: 'Liquors', count: 0, icon: '🥃', category: 'liquor' },
+    { label: 'Mocktails', count: 0, icon: '🍸', category: 'mocktails' },
+     { label: 'Shakes', count: 0, icon: '🥤', category: 'shakes' },
+    { label: 'Protein Shakes', count: 0, icon: '💪', category: 'protein_shakes' },
    
   ];
 
@@ -25,16 +25,16 @@ export const ProductSummary = async (): Promise<CategorySummary[]> => {
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      const type = data.type; 
-      if (type) {
-        counts[type] = (counts[type] || 0) + 1;
+      const category = data.category; 
+      if (category) {
+        counts[category] = (counts[category] || 0) + 1;
       }
     });
 
     // 2. Map counts back to our display array
     return categories.map(cat => ({
       ...cat,
-      count: counts[cat.type] || 0
+      count: counts[cat.category] || 0
     }));
 
   } catch (error) {

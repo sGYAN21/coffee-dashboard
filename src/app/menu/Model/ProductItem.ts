@@ -26,8 +26,8 @@ export const ProductItem = async (): Promise<ProductRow[]> => {
       return {
         id: item.id.substring(0, 5).toUpperCase(),
         name: data.name || 'Unnamed',
-        type: data.type || 'N/A',
-        category: data.category,
+        type: data.type ,
+        category: data.category || 'N/A',
         price: data.price?.small ? `$${data.price.small}` : 'N/A',
         isActive: data.isActive ?? true,
         rawPrices: data.price || {},
