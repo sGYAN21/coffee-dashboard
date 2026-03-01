@@ -19,7 +19,7 @@ const normalizedEmail = email.trim().toLowerCase();
     createdAt: new Date(),
     lastLogin: new Date(),
   }
-  await createDocument("users", response.uid, userData);
+  await createDocument("admin", response.uid, userData);
 
   localStorage.setItem(
     "userInfo",
