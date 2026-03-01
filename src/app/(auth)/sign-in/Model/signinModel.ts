@@ -12,7 +12,7 @@ export const signInUser = async (email: string, password: string)=>{
 
     const idToken = await user.getIdToken();
 
-    const userDoc = await getDoc (doc(db,'users', user.uid));
+    const userDoc = await getDoc (doc(db,'admin', user.uid));
 
     if(!userDoc.exists()){
         throw new Error ("User profile not found.");
